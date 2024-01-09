@@ -1,33 +1,29 @@
-﻿using Domain.Errors;
-using Domain.Repositories;
+﻿using Domain.Repositories;
 using Mapster;
 using MediatR;
 
 namespace Application.Features.TeamMember.Queries;
 
-public record GetTeamMemberByIdQuery(Guid Id) : IRequest<TeamMemberDto>;
+public record GetAllTeamMembersQuery() : IRequest<List<TeamMemberDto>>;
 
-public class GetTeamMemberByIdQueryHandler :
-    IRequestHandler<GetTeamMemberByIdQuery, TeamMemberDto>
+public class GetAllTeamMembersQueryHandler :
+    IRequestHandler<GetAllTeamMembersQuery, List<TeamMemberDto>>
 {
     private readonly ITeamMemberRepository _teamMemberRepository;
 
-    public GetTeamMemberByIdQueryHandler(ITeamMemberRepository teamMemberRepository)
+    public GetAllTeamMembersQueryHandler(ITeamMemberRepository teamMemberRepository)
     {
         _teamMemberRepository = teamMemberRepository;
     }
 
-    public Task<TeamMemberDto> Handle(
-        GetTeamMemberByIdQuery request,
+    public Task<List<TeamMemberDto>> Handle(
+        GetAllTeamMembersQuery request,
         CancellationToken cancellationToken)
     {
-        var teamMember = _teamMemberRepository.GetById(request.Id);
+        var teamMembers = _teamMemberRepository.GetAll();
 
-        if (teamMember == null)
-        {
-            throw new NotFoundException($"Team member with id {request.Id} not found");
-        }
+        var result = teamMembers.Adapt<List<TeamMemberDto>>();
 
-        return Task.FromResult(teamMember.Adapt<TeamMemberDto>());
+        return Task.FromResult(result);
     }
 }

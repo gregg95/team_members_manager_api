@@ -1,5 +1,4 @@
-﻿using Domain.Entities;
-using Domain.Errors;
+﻿using Domain.Errors;
 using Domain.Repositories;
 using Infrastructure.Presistence;
 using MediatR;
