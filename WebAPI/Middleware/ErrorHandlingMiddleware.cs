@@ -1,4 +1,5 @@
 ﻿using Domain.Errors;
+using FluentValidation;
 using Newtonsoft.Json;
 using System.Net;
 using InvalidOperationException = Domain.Errors.InvalidOperationException;
@@ -23,6 +24,10 @@ public class ErrorHandlingMiddleware
         catch (NotFoundException ex)
         {
             await HandleExceptionAsync(context, ex, HttpStatusCode.NotFound);
+        }
+        catch (ValidationException ex)
+        {
+            await HandleExceptionAsync(context, ex, HttpStatusCode.BadRequest);
         }
         catch (InvalidOperationException ex)
         {

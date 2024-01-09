@@ -13,7 +13,7 @@ services.AddCors(options =>
     options.AddPolicy(name: corsPolicyName,
                       builder =>
                       {
-                          builder.WithOrigins("http://localhost:3000")
+                          builder.AllowAnyOrigin()
                                  .AllowAnyHeader()
                                  .AllowAnyMethod();
                       });
@@ -43,11 +43,11 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
 }
 
+app.UseCors(corsPolicyName);
+
 app.UseStaticFiles();
 
 app.UseErrorHandlingMiddleware();
-
-app.UseCors(corsPolicyName);
 
 app.UseSwagger();
 
